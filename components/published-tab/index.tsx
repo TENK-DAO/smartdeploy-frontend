@@ -2,11 +2,10 @@ import { BsSendPlus } from 'react-icons/bs';
 import Popup from 'reactjs-popup';
 import styles from './style.module.css';
 
-import { smartdeploy, UserWalletInfoProps, UserWalletInfo } from "@/pages";
+import { smartdeploy, StateVariablesProps, UserWalletInfo, FetchDatas } from "@/pages";
 import { isConnected } from '@stellar/freighter-api';
 import { Ok, Err, Option, Version } from 'smartdeploy-client'
-import { useAsync } from "react-async";
-import { useState, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 interface PublishedContract {
     index: number;
@@ -18,7 +17,8 @@ interface PublishedContract {
 }
 
 type DeployIconComponentProps = {
-    userWalletInfo: UserWalletInfoProps;
+    userWalletInfo: UserWalletInfo;
+    refetchDeployedContract: FetchDatas;
     contract_name: string;
     version: Option<Version>;
     version_string: string;
@@ -82,6 +82,7 @@ async function listAllPublishedContracts() {
 
 async function deploy(
     userWalletInfo: UserWalletInfo,
+    refetchDeployedContract: FetchDatas,
     setIsDeploying: Dispatch<SetStateAction<boolean>>,
     setDeployedName: Dispatch<SetStateAction<string>>,
     setWouldDeploy: Dispatch<SetStateAction<boolean>>,
@@ -118,22 +119,22 @@ async function deploy(
             // Now that everything is ok, deploy the contract
             else {
 
-                setDeployedName("");
-
                 try {
 
                     const tx = await smartdeploy.deploy(argsObj, { responseType: 'full' });
                     console.log(tx);
-
+                    refetchDeployedContract.setFetch(true);
+                    setDeployedName("");
+                    setWouldDeploy(false);
+                    
 
                 } catch (error) {
                     console.error(error);
                     window.alert(error);
                 }
 
-                setWouldDeploy(false);
                 setIsDeploying(false);
-                
+
             }
         }
     }
@@ -195,12 +196,13 @@ function DeployIconComponent(props: DeployIconComponentProps) {
                                                         contract_name: props.contract_name,
                                                         version: props.version,
                                                         deployed_name: deployedName,
-                                                        owner: props.userWalletInfo.data.address,
+                                                        owner: props.userWalletInfo.address,
                                                         salt: undefined
                                                     }
 
                                                     deploy(
-                                                        props.userWalletInfo.data,
+                                                        props.userWalletInfo,
+                                                        props.refetchDeployedContract,
                                                         setIsDeploying,
                                                         setDeployedName,
                                                         setWouldDeploy,
@@ -229,26 +231,84 @@ function DeployIconComponent(props: DeployIconComponentProps) {
 }
 
 
-export default function PublishedTab(props: UserWalletInfoProps) {
+export default function PublishedTab(props: StateVariablesProps) {
 
-    const { data, error, isPending } = useAsync({ promiseFn: listAllPublishedContracts});
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<boolean>(false);
+    const [publishedContracts, setPublishedContracts] = useState<PublishedContract[]>([]);
+
+    useEffect(() => {
+
+        async function fetchPublishedContracts() {
+            try {
+              const datas = await listAllPublishedContracts();
+              setPublishedContracts(datas as PublishedContract[]);
+              setLoading(false);
+            } catch (error) {
+                console.error(error);
+                window.alert(error);
+                setError(true);
+            }
+        }
+
+        if (props.fetchPublished?.fetch === true) {
+            setLoading(true);
+            fetchPublishedContracts();
+            props.fetchPublished.setFetch(false);
+        }
+
+    }, [props.fetchPublished?.fetch]);
     
-    if (isPending) return (<p className={styles.load}>Loading...</p>);
+    if (loading) return (
+        <div className={styles.publishedTabContainer}>
+            <table className={styles.publishedTabHead}>
+                <caption>PUBLISHED CONTRACTS</caption>
+                <colgroup>
+                    <col className={styles.contractCol}></col>
+                    <col className={styles.authorCol}></col>
+                    <col className={styles.versionCol}></col>
+                    <col className={styles.deployCol}></col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Contract</th>
+                        <th>Author</th>
+                        <th>Version</th>
+                        <th>Deploy</th>
+                    </tr>
+                </thead>
+            </table>
+            <div className={styles.publishedTabContentContainer}>
+                <table className={styles.publishedTabContent}>
+                    <colgroup>
+                        <col className={styles.contractCol}></col>
+                        <col className={styles.authorCol}></col>
+                        <col className={styles.versionCol}></col>
+                        <col className={styles.deployCol}></col>
+                    </colgroup>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
 
     else if (error) { throw new Error("Error when trying to fetch Published Contracts");}
 
-    else if (data) {
+    else if (publishedContracts) {
 
         const rows: JSX.Element[] = [];
 
-        data.forEach((publishedContract) => {
+        publishedContracts.forEach((publishedContract) => {
             rows.push(
                 <tr key={publishedContract.index}>
                     <td className={styles.contractCell}>{publishedContract.name}</td>
                     <td>{publishedContract.author}</td>
                     <td>{publishedContract.version_string}</td>
                     <DeployIconComponent
-                        userWalletInfo={props}
+                        userWalletInfo={props.walletInfo}
+                        refetchDeployedContract={props.fetchDeployed as FetchDatas}
                         contract_name={publishedContract.name}
                         version={publishedContract.version}
                         version_string={publishedContract.version_string}

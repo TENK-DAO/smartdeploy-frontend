@@ -30,8 +30,15 @@ export type UserWalletInfo = {
   setNetwork: Dispatch<SetStateAction<string>>;
 }
 
-export type UserWalletInfoProps = {
-  data: UserWalletInfo;
+export type FetchDatas = {
+  fetch: boolean;
+  setFetch: Dispatch<SetStateAction<boolean>>;
+}
+
+export type StateVariablesProps = {
+  walletInfo: UserWalletInfo;
+  fetchDeployed?: FetchDatas;
+  fetchPublished?: FetchDatas;
 }
 
 export default function Home() {
@@ -42,15 +49,34 @@ export default function Home() {
   const [address, setAddress] = useState<string>("");
   const [network, setNetwork] = useState<string>("");
 
+  // Parse state variables regarding the Freighter's infos
   const userWalletInfo: UserWalletInfo = {
-    connected: connected,
-    setConnected: setConnected,
-    hasFreighter: hasFreighter,
-    setHasFreighter: setHasFreighter,
-    address: address,
-    setAddress: setAddress,
-    network: network,
-    setNetwork: setNetwork,
+    connected,
+    setConnected,
+    hasFreighter,
+    setHasFreighter,
+    address,
+    setAddress,
+    network,
+    setNetwork,
+  }
+
+  // State variable to fetch the published contracts
+  const [fetchPublishedContracts, setFetchPublishedContracts] = useState<boolean>(true);
+
+  // Parse state variable for fetching the deployed contracts
+  const parsedFetchPublishedContracts: FetchDatas = {
+    fetch: fetchPublishedContracts,
+    setFetch: setFetchPublishedContracts,
+  }
+
+  // State variable to fetch the deployed contracts
+  const [fetchDeployedContracts, setFetchDeployedContracts] = useState<boolean>(true);
+
+  // Parse state variable for fetching the deployed contracts
+  const parsedFetchDeployedContracts: FetchDatas = {
+    fetch: fetchDeployedContracts,
+    setFetch: setFetchDeployedContracts,
   }
 
   return (
@@ -102,12 +128,12 @@ export default function Home() {
               <FaTwitter className={styles.socialItem} style={{ fill: 'rgb(161, 161, 163)' }}/>
             </a>
           </div>
-          <WalletInfo data={userWalletInfo}/>
+          <WalletInfo walletInfo={userWalletInfo}/>
         </div>
       </div>
 
       <main className={`${styles.main} ${inter.className}`}>
-        
+
         <div className={styles.center}>
           <Image
             className={styles.logo}
@@ -121,8 +147,8 @@ export default function Home() {
         </div>
 
         <PopupDappInfo/>
-        <PublishedTab data={userWalletInfo}/>
-        <DeployedTab/>
+        <PublishedTab walletInfo={userWalletInfo} fetchDeployed={parsedFetchDeployedContracts} fetchPublished={parsedFetchPublishedContracts}/>
+        <DeployedTab fetch={fetchDeployedContracts} setFetch={setFetchDeployedContracts}/>
         
         <div className={styles.grid}>
           <a
