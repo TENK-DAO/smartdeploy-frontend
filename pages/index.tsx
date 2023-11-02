@@ -9,6 +9,7 @@ import DeployedTab from '@/components/deployed-tab'
 import PopupDappInfo from '@/components/dapp-info-popup'
 import { FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
 import { Contract, networks } from 'smartdeploy-client';
+import { useThemeContext } from '../components/ThemeContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -42,6 +43,11 @@ export type StateVariablesProps = {
 }
 
 export default function Home() {
+
+  // Import the current Theme
+  const { activeTheme, setActiveTheme, inactiveTheme } = useThemeContext();
+
+  console.log(activeTheme);
 
   // State variables from Freighter Wallet
   const [connected, setConnected] = useState<boolean>(false);
@@ -129,6 +135,7 @@ export default function Home() {
             </a>
           </div>
           <WalletInfo walletInfo={userWalletInfo}/>
+          <button onClick={() => setActiveTheme(inactiveTheme)}>button</button>
         </div>
       </div>
 
