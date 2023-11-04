@@ -6,6 +6,7 @@ import { smartdeploy, StateVariablesProps, UserWalletInfo, FetchDatas } from "@/
 import { isConnected } from '@stellar/freighter-api';
 import { Ok, Err, Option, Version } from 'smartdeploy-client'
 import { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useThemeContext } from '../ThemeContext'
 
 interface PublishedContract {
     index: number;
@@ -142,6 +143,9 @@ async function deploy(
 
 function DeployIconComponent(props: DeployIconComponentProps) {
 
+    // Import the current Theme
+    const { activeTheme } = useThemeContext();
+
     const [wouldDeploy, setWouldDeploy]   = useState<boolean>(false); 
     const [deployedName, setDeployedName] = useState<string>("");
     const [isDeploying, setIsDeploying]   = useState<boolean>(false);
@@ -165,17 +169,18 @@ function DeployIconComponent(props: DeployIconComponentProps) {
                         <p className={styles.deployingMessage}>Deploying...</p>
                     </td>
                     <Popup  open={wouldDeploy} closeOnDocumentClick={false}>
-                        <div className={styles.popupContainer}>
+                        <div className={styles.popupContainer} data-theme={activeTheme}>
                             <button className={styles.close} onClick={() => setWouldDeploy(false)}>
                                 &times;
                             </button>
-                            <div className={styles.header}>Deploy <span className={styles.nameColor}>{props.contract_name} ({props.version_string})</span> </div>
+                            <div className={styles.header}>Deploy <span className={styles.nameColor} data-theme={activeTheme}>{props.contract_name} ({props.version_string})</span> </div>
                             <div className={styles.content}>
-                                <p className={styles.mainMessage}><b>You are about to create an instance of <span className={styles.nameColor}>{props.contract_name}</span> published contract where you will be the owner.</b><br/></p>
+                                <p className={styles.mainMessage}><b>You are about to create an instance of <span className={styles.nameColor} data-theme={activeTheme}>{props.contract_name}</span> published contract where you will be the owner.</b><br/></p>
                                 <div className={styles.deployedNameDiv}>
                                     <b>Please choose a contract instance name:</b>
                                     <input 
-                                        className={styles.deployedNameInput} 
+                                        className={styles.deployedNameInput}
+                                        data-theme={activeTheme}
                                         type="text" 
                                         spellCheck={false} 
                                         placeholder="deployed_name" 
@@ -188,6 +193,7 @@ function DeployIconComponent(props: DeployIconComponentProps) {
                                 {!isDeploying ? (
                                     <>
                                         <button className={styles.button} 
+                                                data-theme={activeTheme}
                                                 onClick={() => {
 
                                                     setIsDeploying(true);
@@ -212,12 +218,12 @@ function DeployIconComponent(props: DeployIconComponentProps) {
                                         >
                                             Deploy
                                         </button>
-                                        <button className={styles.button} onClick={() => setWouldDeploy(false)}>
+                                        <button className={styles.button} data-theme={activeTheme} onClick={() => setWouldDeploy(false)}>
                                             Cancel
                                         </button>
                                     </>
                                 ) : (
-                                    <button className={styles.buttonWhenDeploying}>
+                                    <button className={styles.buttonWhenDeploying} data-theme={activeTheme}>
                                         Deploying...
                                     </button>
                                 )}
@@ -232,6 +238,9 @@ function DeployIconComponent(props: DeployIconComponentProps) {
 
 
 export default function PublishedTab(props: StateVariablesProps) {
+
+    // Import the current Theme
+    const { activeTheme } = useThemeContext();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
@@ -260,16 +269,16 @@ export default function PublishedTab(props: StateVariablesProps) {
     }, [props.fetchPublished?.fetch]);
     
     if (loading) return (
-        <div className={styles.publishedTabContainer}>
+        <div className={styles.publishedTabContainer} data-theme={activeTheme}>
             <table className={styles.publishedTabHead}>
-                <caption>PUBLISHED CONTRACTS</caption>
+                <caption data-theme={activeTheme}>PUBLISHED CONTRACTS</caption>
                 <colgroup>
                     <col className={styles.contractCol}></col>
                     <col className={styles.authorCol}></col>
                     <col className={styles.versionCol}></col>
                     <col className={styles.deployCol}></col>
                 </colgroup>
-                <thead>
+                <thead data-theme={activeTheme}>
                     <tr>
                         <th>Contract</th>
                         <th>Author</th>
@@ -302,7 +311,7 @@ export default function PublishedTab(props: StateVariablesProps) {
 
         publishedContracts.forEach((publishedContract) => {
             rows.push(
-                <tr key={publishedContract.index}>
+                <tr key={publishedContract.index} data-theme={activeTheme}>
                     <td className={styles.contractCell}>{publishedContract.name}</td>
                     <td>{publishedContract.author}</td>
                     <td>{publishedContract.version_string}</td>
@@ -318,16 +327,16 @@ export default function PublishedTab(props: StateVariablesProps) {
         });
         
         return(
-            <div className={styles.publishedTabContainer}>
+            <div className={styles.publishedTabContainer} data-theme={activeTheme}>
                 <table className={styles.publishedTabHead}>
-                    <caption>PUBLISHED CONTRACTS</caption>
+                    <caption data-theme={activeTheme}>PUBLISHED CONTRACTS</caption>
                     <colgroup>
                         <col className={styles.contractCol}></col>
                         <col className={styles.authorCol}></col>
                         <col className={styles.versionCol}></col>
                         <col className={styles.deployCol}></col>
                     </colgroup>
-                    <thead>
+                    <thead data-theme={activeTheme}>
                         <tr>
                             <th>Contract</th>
                             <th>Author</th>

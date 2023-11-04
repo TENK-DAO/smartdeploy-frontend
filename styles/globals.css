@@ -9,7 +9,7 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
-  --primary-glow: conic-gradient(
+  /*--primary-glow: conic-gradient(
     from 180deg at 50% 50%,
     #16abff33 0deg,
     #0885ff33 55deg,
@@ -20,7 +20,7 @@
   --secondary-glow: radial-gradient(
     rgba(255, 255, 255, 1),
     rgba(255, 255, 255, 0)
-  );
+  );*/
 
   --tile-start-rgb: 239, 245, 249;
   --tile-end-rgb: 228, 232, 233;
@@ -40,19 +40,166 @@
   --card-border-rgb: 131, 134, 135;
 }
 
+div,
+div[data-theme="light"] {
+  --headerBar-background-color: rgba(218, 226, 226, 0.671);
+  --headerBar-box-shadow: rgba(19, 19, 18, 0.702);
+  --social-item: rgba(57, 57, 56, 0.951);
+  --wallet-buttons-color: rgb(218,165,32);
+  --wallet-info-text-color: rgb(17, 17, 17);
+  --primary-glow: radial-gradient(rgba(95, 93, 93, 0.257), rgba(95, 93, 93, 0.099));
+  --secondary-glow: linear-gradient(
+    to bottom right,
+    rgba(95, 93, 93, 0.1),
+    rgba(95, 93, 93, 0.1),
+    rgba(95, 93, 93, 0.3)
+  );
+  --table-box-shadow: rgba(95, 93, 93, 0.257);
+  --footer-background-color: rgba(241, 241, 241, 0.926);
+  --footer-border-top: rgba(43, 42, 42, 0.476);
+  --footer-box-shadow: rgba(19, 19, 18, 0.702);
+  --footer-font-color: #2f3030dc;
+
+  --popup-background-color: rgb(219, 224, 224);
+  --popup-font-color: rgb(33, 31, 31);
+}
+div[data-theme="dark"] {
+  --headerBar-background-color: #04042dab;
+  --headerBar-box-shadow: rgba(235, 235, 237, 0.257);
+  --social-item: rgb(161, 161, 163);
+  --wallet-buttons-color: #025bb1;
+  --wallet-info-text-color: #fff;
+  --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
+  --secondary-glow: linear-gradient(
+    to bottom right,
+    rgba(1, 65, 255, 0),
+    rgba(1, 65, 255, 0),
+    rgba(1, 65, 255, 0.3)
+  );
+  --table-box-shadow: rgba(2, 29, 104, 0.257);
+  --footer-background-color: rgb(6, 6, 7);
+  --footer-border-top: rgba(162, 162, 163, 0.476);
+  --footer-box-shadow: rgba(235, 235, 237, 0.257);
+  --footer-font-color: #a8c6dcdc;
+
+  --popup-background-color: rgb(45, 49, 49);
+  --popup-font-color: whitesmoke;
+}
+
+main,
+main[data-theme="light"] {
+  --main-background: rgb(255, 255, 255);
+  --main-background-gradient: rgba(245, 245, 239, 0.96);
+}
+main[data-theme="dark"] {
+  --main-background: #07021e;
+  --main-background-gradient: rgb(3, 0, 14);
+}
+
+p,
+p[data-theme="light"] {
+  --smart-deploy-message-color: rgb(32, 30, 30);
+  --smart-deploy-message-filter-shadow: #00000070;
+  --grid-doc-font-color: black;
+}
+p[data-theme="dark"] {
+  --smart-deploy-message-color: rgba(255, 255, 255, 0.834);
+  --smart-deploy-message-filter-shadow: #ffffff70;
+  --grid-doc-font-color: white;
+}
+
+caption,
+caption[data-theme="light"] {
+  --caption-background-color: rgba(160, 81, 45, 0.565);
+  --caption-font-color: #272626;
+}
+caption[data-theme="dark"] {
+  --caption-background-color: #025cb159;
+  --caption-font-color: #b6b3b3;
+}
+
+thead,
+thead[data-theme="light"] {
+  --thead-background-color: rgba(160, 81, 45, 0.565);
+  --thead-font-color: #272626;
+}
+thead[data-theme="dark"] {
+  --thead-background-color: #025cb159;
+  --thead-font-color: #b6b3b3;
+}
+
+tr,
+tr[data-theme="light"] {
+  --tr-font-color: #484747;
+  --tr-nth-of-type: rgba(148, 105, 83, 0.314);
+  --tr-border-bottom-color: #0302029b;
+}
+tr[data-theme="dark"] {
+  --tr-font-color: rgb(169, 168, 168);
+  --tr-nth-of-type: rgba(128, 128, 128, 0.328);
+  --tr-border-bottom-color: #dddddd9b;
+}
+
+h2,
+h2[data-theme="light"] {
+  --grid-doc-font-color: black;
+}
+h2[data-theme="dark"] {
+  --grid-doc-font-color: white;
+}
+
+a,
+a[data-theme="light"] {
+  --footer-font-color-hover: #d59004dc;
+  --popup-important-font-color: rgb(234, 126, 2);
+}
+a[data-theme="dark"] {
+  --footer-font-color-hover: #f3f4f6dc;
+  --popup-important-font-color: rgb(0, 212, 250);
+}
+
+span,
+span[data-theme="light"] {
+  --popup-important-font-color: rgb(234, 126, 2);
+}
+span[data-theme="dark"] {
+  --popup-important-font-color: rgb(0, 212, 250);
+}
+
+button,
+button[data-theme="light"] {
+  --popup-button-font-color: rgb(18, 16, 16);
+  --popup-button-background-color: rgba(236, 136, 22, 0.745);
+  --popup-button-hover: rgba(198, 117, 24, 0.745);
+}
+button[data-theme="dark"] {
+  --popup-button-font-color: rgb(0, 212, 250);
+  --popup-button-background-color: rgb(45, 49, 49);
+  --popup-button-hover: rgba(2, 111, 128, 0.316);
+}
+
+input,
+input[data-theme="light"] {
+  --popup-input-font-color: #262525;
+}
+input[data-theme="dark"] {
+  --popup-input-font-color: #f3ebeb;
+}
+
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
 
-    --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
+    /*--primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
       to bottom right,
       rgba(1, 65, 255, 0),
       rgba(1, 65, 255, 0),
       rgba(1, 65, 255, 0.3)
-    );
+    );*/
 
     --tile-start-rgb: 2, 13, 46;
     --tile-end-rgb: 2, 5, 19;

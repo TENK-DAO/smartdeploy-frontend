@@ -5,6 +5,7 @@ import styles from './style.module.css';
 import { smartdeploy, FetchDatas } from "@/pages";
 import { Ok, Err } from 'smartdeploy-client'
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useThemeContext } from '../ThemeContext'
 
 interface DeployedContract {
     index: number;
@@ -105,6 +106,9 @@ function ClipboardIconComponent(props: ClipboardIconComponentProps) {
 
 export default function DeployedTab(props: FetchDatas) {
 
+    // Import the current Theme
+    const { activeTheme } = useThemeContext();
+
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<boolean>(false);
     const [deployedContracts, setDeployedContracts] = useState<DeployedContract[]>([]);
@@ -132,15 +136,15 @@ export default function DeployedTab(props: FetchDatas) {
     }, [props.fetch]);
 
     if (loading) return (
-        <div className={styles.deployedTabContainer}>
+        <div className={styles.deployedTabContainer} data-theme={activeTheme}>
             <table className={styles.deployedTabHead}>
-                <caption>DEPLOYED CONTRACTS</caption>
+                <caption data-theme={activeTheme}>DEPLOYED CONTRACTS</caption>
                 <colgroup>
                     <col className={styles.contractCol}></col>
                     <col className={styles.addressCol}></col>
                     <col className={styles.copyCol}></col>
                 </colgroup>
-                <thead>
+                <thead data-theme={activeTheme}>
                     <tr>
                         <th>Contract</th>
                         <th>Address</th>
@@ -171,7 +175,7 @@ export default function DeployedTab(props: FetchDatas) {
 
         deployedContracts.forEach((deployedContract) => {
             rows.push(
-                <tr key={deployedContract.index}>
+                <tr key={deployedContract.index} data-theme={activeTheme}>
                     <td className={styles.contractCell}>{deployedContract.name}</td>
                     <td>{deployedContract.address}</td>
                     <ClipboardIconComponent address={deployedContract.address}/>
@@ -180,15 +184,15 @@ export default function DeployedTab(props: FetchDatas) {
         });
 
         return(
-            <div className={styles.deployedTabContainer}>
+            <div className={styles.deployedTabContainer} data-theme={activeTheme}>
                 <table className={styles.deployedTabHead}>
-                    <caption>DEPLOYED CONTRACTS</caption>
+                    <caption data-theme={activeTheme}>DEPLOYED CONTRACTS</caption>
                     <colgroup>
                         <col className={styles.contractCol}></col>
                         <col className={styles.addressCol}></col>
                         <col className={styles.copyCol}></col>
                     </colgroup>
-                    <thead>
+                    <thead data-theme={activeTheme}>
                         <tr>
                             <th>Contract</th>
                             <th>Address</th>

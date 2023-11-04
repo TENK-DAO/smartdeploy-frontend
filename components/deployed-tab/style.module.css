@@ -1,8 +1,9 @@
 .deployedTabContainer {
     margin-bottom: 3rem;
-    border-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     box-shadow:
-        1.2rem 1.2rem 35px 22px rgba(2, 29, 104, 0.257);
+        1.2rem 1.2rem 35px 22px var(--table-box-shadow);
 }
 
 .deployedTabHead,
@@ -22,10 +23,10 @@
 }
 
 .deployedTabHead caption {
-    background-color: #025cb159;
+    background-color: var(--caption-background-color);
     font-size: 1.4rem;
     font-weight: bold;
-    color: #b6b3b3;
+    color: var(--caption-font-color);
     text-align: center;
     padding: 0.9rem 0.4rem 0.6rem 0.4rem;
     border-radius: 8px 8px 0 0;
@@ -42,8 +43,8 @@
 }
 
 .deployedTabHead thead {
-    background-color: #025cb159;
-    color: #8d8c8c;
+    background-color: var(--thead-background-color);
+    color: var(--thead-font-color);
     font-weight: bold;
     text-align: left;
 }
@@ -58,13 +59,15 @@
 
 .deployedTabContent tbody td {
     padding: 0.4rem 0.5rem;
-    color: rgb(169, 168, 168);
     font-size: 0.9rem;
-    border-bottom: 1px solid #dddddd9b;
+}
+.deployedTabContent tbody tr {
+    color: var(--tr-font-color);
+    border-bottom: 1px solid var(--tr-border-bottom-color);
 }
 
 .deployedTabContent tbody tr:nth-of-type(even) {
-    background-color: rgba(128, 128, 128, 0.328);
+    background-color: var(--tr-nth-of-type);
 }
 
 .contractCell {

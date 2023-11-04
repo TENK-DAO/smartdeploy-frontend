@@ -3,13 +3,13 @@
     justify-content: center;
     align-items: center;
     float: right;
-    width: 40%;
+    width: 37%;
 }
 
 .connectButton {
     padding: 0.5rem 0.9rem;
-    background-color: #025bb1;
-    color: #fff;
+    background-color: var(--wallet-buttons-color);
+    color: var(--wallet-info-text-color);
     border: none;
     border-radius: 0.9rem;
     font-size: 0.9rem;
@@ -24,7 +24,8 @@
 .card {
     text-align: center;
     font-size: 0.8rem;
-    background-color: #025bb1;
+    background-color: var(--wallet-buttons-color);
+    color: var(--wallet-info-text-color);
     padding: 0.5rem;
     border-radius: 10px;
     margin-right: 0.5rem;

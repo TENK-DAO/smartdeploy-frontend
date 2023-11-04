@@ -1,9 +1,10 @@
 .popupContainer {
-    background-color: rgb(45, 49, 49);
-    color: whitesmoke;
+    background-color: var(--popup-background-color);
+    color: var(--popup-font-color);
     font-family: Arial, Helvetica, sans-serif;
     width: 60rem;
     border-radius: 10px;
+    border: solid 1px rgb(76, 75, 75);
 }
 .header {
     width: 100%;
@@ -25,7 +26,7 @@
     margin-bottom: 0.9rem;
 } 
 .content > p > a {
-    color: rgb(0, 212, 250);
+    color: var(--popup-important-font-color);
     outline: none;
 }
 
@@ -35,6 +36,7 @@
 
 .checkbox {
     margin-right: 0.5rem;
+    background-color: antiquewhite;
 }
 .label {
     font-size: 0.9rem;
@@ -51,11 +53,11 @@
     padding: 0.2rem 2.5rem 0.2rem 2.5rem;
     font-size: 1.2rem;
     font-weight: bold;
-    background-color: rgb(45, 49, 49);
-    color: rgb(0, 212, 250);
-    border: 1.5px solid rgb(0, 212, 250);
+    background-color: var(--popup-button-background-color);
+    color: var(--popup-button-font-color);
+    border: 1.5px solid var(--popup-button-font-color);
     border-radius: 5px;
 }
 .understood:hover {
-    background-color: rgba(2, 111, 128, 0.316);
+    background-color: var(--popup-button-hover);
 }

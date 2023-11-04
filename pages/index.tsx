@@ -8,6 +8,8 @@ import PublishedTab from '@/components/published-tab'
 import DeployedTab from '@/components/deployed-tab'
 import PopupDappInfo from '@/components/dapp-info-popup'
 import { FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
+import { BsFillSunFill } from 'react-icons/bs'
+import { MdNightlightRound } from 'react-icons/md'
 import { Contract, networks } from 'smartdeploy-client';
 import { useThemeContext } from '../components/ThemeContext'
 
@@ -94,63 +96,92 @@ export default function Home() {
         <link rel="icon" href="/sd-logo-det.ico" />
       </Head>
 
-      
-
-      <div className={styles.headerBar}>
-        <div className={styles.container}>
-          <div className={styles.social}>
-            <a
-              href="https://www.smartdeploy.dev/"
-              rel="noopener noreferrer"
-            >
-              <Image
-                className={styles.socialItem}
-                src="/sd-logo-written-header.svg"
-                alt="SmartDeploy Logo"
-                width={127}
-                height={26}
-                priority
-              />
-            </a>
+      <div className={styles.headerBar} data-theme={activeTheme}>
+        <div className={styles.container} data-theme={activeTheme}>
+          <div className={styles.social} data-theme={activeTheme}>
+            {activeTheme === 'dark' ? (
+              <a
+                href="https://www.smartdeploy.dev/"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  className={styles.socialItem}
+                  src="/sd-logo-written-header-white.svg"
+                  alt="SmartDeploy Logo"
+                  width={127}
+                  height={26}
+                  priority
+                />
+              </a>
+            ) : (
+              <a
+                href="https://www.smartdeploy.dev/"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  className={styles.socialItem}
+                  src="/sd-logo-written-header-black.svg"
+                  alt="SmartDeploy Logo"
+                  width={127}
+                  height={26}
+                  priority
+                />
+              </a>
+            )}
             <a
               href="https://github.com/TENK-DAO/smartdeploy"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaGithub className={styles.socialItem} style={{ fill: 'rgb(161, 161, 163)' }}/>
+              <FaGithub className={styles.socialItem} style={{ fill: 'var(--social-item)' }}/>
             </a>
             <a
               href="https://discord.com/invite/6fKqnSfr"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaDiscord className={styles.socialItem} style={{ fill: 'rgb(161, 161, 163)' }}/>
+              <FaDiscord className={styles.socialItem} style={{ fill: 'var(--social-item)' }}/>
             </a>
             <a
               href="https://twitter.com/TENKDAO"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <FaTwitter className={styles.socialItem} style={{ fill: 'rgb(161, 161, 163)' }}/>
+              <FaTwitter className={styles.socialItem} style={{ fill: 'var(--social-item)' }}/>
             </a>
           </div>
           <WalletInfo walletInfo={userWalletInfo}/>
-          <button onClick={() => setActiveTheme(inactiveTheme)}>button</button>
+          { activeTheme === "light" ? (
+            <MdNightlightRound className={styles.themeChange} onClick={() => setActiveTheme(inactiveTheme)} style={{ fill: 'var(--social-item)' }}/>
+          ) : (
+            <BsFillSunFill className={styles.themeChange} onClick={() => setActiveTheme(inactiveTheme)} style={{ fill: 'var(--social-item)' }}/>
+          )}
         </div>
       </div>
 
-      <main className={`${styles.main} ${inter.className}`}>
+      <main className={`${styles.main} ${inter.className}`} data-theme={activeTheme}>
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/sd-logo-written.svg"
-            alt="SmartDeploy Logo"
-            width={340}
-            height={70}
-            priority
-          />
-          <p className={styles.smartdeployMessage}>A framework for publishing, deploying, invoking and upgrading Soroban smart contracts</p>
+        <div className={styles.center} data-theme={activeTheme}>
+          { activeTheme === "light" ? (
+            <Image
+              className={styles.logoB}
+              src="/sd-logo-written-black.svg"
+              alt="SmartDeploy Logo"
+              width={340}
+              height={70}
+              priority
+            />
+          ) : (
+            <Image
+              className={styles.logoW}
+              src="/sd-logo-written-white.svg"
+              alt="SmartDeploy Logo"
+              width={340}
+              height={70}
+              priority
+            />
+          )}
+          <p className={styles.smartdeployMessage} data-theme={activeTheme}>A framework for publishing, deploying, invoking and upgrading Soroban smart contracts</p>
         </div>
 
         <PopupDappInfo/>
@@ -159,45 +190,30 @@ export default function Home() {
         
         <div className={styles.grid}>
           <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://github.com/TENK-DAO/smartdeploy/blob/main/README.md"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
           >
-            <h2>
+            <h2 data-theme={activeTheme}>
               Docs <span>-&gt;</span>
             </h2>
-            <p>
-              Find in-depth information about Next.js features and&nbsp;API.
+            <p data-theme={activeTheme}>
+              Learn how to deploy, invoke and upgrade contracts with smartdeploy
             </p>
           </a>
 
           <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href="https://github.com/TENK-DAO/smartdeploy/blob/main/README.md"
             className={styles.card}
             target="_blank"
             rel="noopener noreferrer"
           >
-            <h2>
-              Learn <span>-&gt;</span>
+            <h2 data-theme={activeTheme}>
+              Setup <span>-&gt;</span>
             </h2>
-            <p>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
+            <p data-theme={activeTheme}>
+              Install the smartdeploy-CLI to fully use all its functionnalities
             </p>
           </a>
         </div>        
@@ -206,8 +222,8 @@ export default function Home() {
 
       </main>
 
-      <div className={styles.footer}>
-        <div className={styles.left}>
+      <div className={styles.footer} data-theme={activeTheme}>
+        <div className={styles.left} data-theme={activeTheme}>
           <p>© {new Date().getFullYear()} SmartDeploy. All rights reserved.</p>
         </div>
         <div className={styles.tenkLogo}>
@@ -226,22 +242,25 @@ export default function Home() {
               />
             </a>
         </div>
-        <div className={styles.right}>
+        <div className={styles.right} data-theme={activeTheme}>
           <a
             href="https://smartdeploy.dev/privacy"
             target='_blank'
+            data-theme={activeTheme}
             >
               <p>Privacy Policy</p>
           </a>
           <a
             href="https://smartdeploy.dev/terms"
             target='_blank'
+            data-theme={activeTheme}
             >
               <p>Terms Of Use</p>
           </a>
           <a
             href="https://smartdeploy.dev/contact"
             target='_blank'
+            data-theme={activeTheme}
             >
               <p>Contact Us</p>
           </a>
