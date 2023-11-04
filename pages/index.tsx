@@ -49,8 +49,6 @@ export default function Home() {
   // Import the current Theme
   const { activeTheme, setActiveTheme, inactiveTheme } = useThemeContext();
 
-  console.log(activeTheme);
-
   // State variables from Freighter Wallet
   const [connected, setConnected] = useState<boolean>(false);
   const [hasFreighter, setHasFreighter] = useState<boolean>(true);
@@ -151,10 +149,20 @@ export default function Home() {
             </a>
           </div>
           <WalletInfo walletInfo={userWalletInfo}/>
-          { activeTheme === "light" ? (
-            <MdNightlightRound className={styles.themeChange} onClick={() => setActiveTheme(inactiveTheme)} style={{ fill: 'var(--social-item)' }}/>
-          ) : (
-            <BsFillSunFill className={styles.themeChange} onClick={() => setActiveTheme(inactiveTheme)} style={{ fill: 'var(--social-item)' }}/>
+          { activeTheme === "dark" ? (
+              <BsFillSunFill  className={styles.themeChange}
+                              style={{ fill: 'var(--social-item)' }}
+                              onClick={() => {
+                                localStorage.setItem("theme", inactiveTheme);
+                                setActiveTheme(inactiveTheme);
+                              }} />
+            ) : (
+              <MdNightlightRound  className={styles.themeChange}
+                                  style={{ fill: 'var(--social-item)' }}
+                                  onClick={() => {
+                                    localStorage.setItem("theme", inactiveTheme);
+                                    setActiveTheme(inactiveTheme);
+                                  }} />
           )}
         </div>
       </div>
@@ -162,10 +170,10 @@ export default function Home() {
       <main className={`${styles.main} ${inter.className}`} data-theme={activeTheme}>
 
         <div className={styles.center} data-theme={activeTheme}>
-          { activeTheme === "light" ? (
+          { activeTheme === "dark" ? (
             <Image
-              className={styles.logoB}
-              src="/sd-logo-written-black.svg"
+              className={styles.logoW}
+              src="/sd-logo-written-white.svg"
               alt="SmartDeploy Logo"
               width={340}
               height={70}
@@ -173,8 +181,8 @@ export default function Home() {
             />
           ) : (
             <Image
-              className={styles.logoW}
-              src="/sd-logo-written-white.svg"
+              className={styles.logoB}
+              src="/sd-logo-written-black.svg"
               alt="SmartDeploy Logo"
               width={340}
               height={70}

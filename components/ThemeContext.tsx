@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, createContext, useContext, useState, ReactNode } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 type ThemeType = 'light' | 'dark'
 
@@ -16,14 +16,35 @@ const ThemeContext = createContext<ThemeContexteType | undefined>(undefined);
 
 export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ children }) => {
 
-    const [activeTheme, setActiveTheme] = useState<ThemeType>("light");
-    const inactiveTheme: ThemeType = activeTheme === "light" ? "dark" : "light";
 
-    return (
-        <ThemeContext.Provider value={{ activeTheme, setActiveTheme, inactiveTheme }}>
-            {children}
-        </ThemeContext.Provider>
-    );
+  const [activeTheme, setActiveTheme] = useState<ThemeType>('light');
+  const inactiveTheme: ThemeType = activeTheme === "light" ? "dark" : "light";
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme");
+    console.log(storedTheme)
+    if (storedTheme) {
+      setActiveTheme(storedTheme as ThemeType);
+    }
+    else {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        setActiveTheme('dark');
+      }
+      else {
+        setActiveTheme('light');
+      }
+    }
+  }, []);
+
+  //useEffect(() => {
+  //  localStorage.setItem("theme", activeTheme as ThemeType);
+  //}, [activeTheme]);
+
+  return (
+      <ThemeContext.Provider value={{ activeTheme, setActiveTheme, inactiveTheme }}>
+          {children}
+      </ThemeContext.Provider>
+  );
 };
 
 export const useThemeContext = (): ThemeContexteType => {
