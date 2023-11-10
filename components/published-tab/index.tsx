@@ -1,6 +1,8 @@
 import { BsSendPlus } from 'react-icons/bs';
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io'
 import Popup from 'reactjs-popup';
 import styles from './style.module.css';
+import Dropdown from 'react-dropdown';
 
 import { smartdeploy, StateVariablesProps, UserWalletInfo, FetchDatas } from "@/pages";
 import { isConnected } from '@stellar/freighter-api';
@@ -12,17 +14,30 @@ interface PublishedContract {
     index: number;
     name: string;
     author: string;
-    version: Version;
-    version_string: string;
-    hash: string;
+    versions: {
+        version: Version,
+        hash: string
+    }[];
 }
 
-type DeployIconComponentProps = {
+type DeployProps = {
     userWalletInfo: UserWalletInfo;
     refetchDeployedContract: FetchDatas;
     contract_name: string;
-    version: Option<Version>;
-    version_string: string;
+    versions: {version: Version, version_string: string}[];
+}
+
+type DeployVersionProps = {
+    userWalletInfo: UserWalletInfo;
+    refetchDeployedContract: FetchDatas;
+    contract_name: string;
+    selected_version: {version: Version, version_string: string};
+}
+
+type VersionDropdownProps = {
+    versions: {version: Version, version_string: string}[];
+    selected_version: {version: Version, version_string: string};
+    set_selected_version: Dispatch<SetStateAction<{version: Version, version_string: string}>>;
 }
 
 type DeployArgsObj = { 
@@ -48,20 +63,26 @@ async function listAllPublishedContracts() {
 
             ///@ts-ignore
             contractArray.forEach(([name, publishedContract], i) => {
-                const version: Version = publishedContract.versions.keys().next().value;
-                const major = version.major;
-                const minor = version.minor;
-                const patch = version.patch;
-                const versionString = `v.${major}.${minor}.${patch}`;
-                
-                const hash = publishedContract.versions.values().next().value.hash.join('');
+
+                let versions: {version: Version, hash: string}[] = [];
+
+                ///@ts-ignore
+                Array.from(publishedContract.versions).forEach((contractDatas: [Version, any]) => {
+
+                    // Version object
+                    const version = contractDatas[0];
+
+                    // hash
+                    const hash = contractDatas[1].hash.join('');
+
+                    versions.push({version, hash});
+                });
+
                 const parsedPublishedContract: PublishedContract = {
                     index: i,
                     name: name,
                     author: publishedContract.author.toString(),
-                    version: version,
-                    version_string: versionString,
-                    hash: hash
+                    versions: versions
                 };
                 
                 publishedContracts.push(parsedPublishedContract);
@@ -141,7 +162,41 @@ async function deploy(
     }
 }
 
-function DeployIconComponent(props: DeployIconComponentProps) {
+function VersionDropdownButton(props: VersionDropdownProps) {
+
+    const versions: string[] = [];
+
+    props.versions.forEach((version) => {
+        versions.push(version.version_string);
+    });
+
+    return(
+        <Dropdown
+            className={styles.dropdownContainer}
+            controlClassName={styles.dropdownControl}
+            menuClassName={styles.dropdownMenu}
+            options={versions}
+            placeholder={versions[0]}
+            arrowClosed={<IoMdArrowDropdown/>}
+            arrowOpen={<IoMdArrowDropup/>}
+            onChange={(version) => {
+
+                const newSelectedVersionString = version.value;
+                
+                const [major, minor, patch] = version.value.split('.').slice(1);
+                const newSelectedVersion: Version = {
+                    major: parseInt(major),
+                    minor: parseInt(minor),
+                    patch: parseInt(patch),
+                }
+                
+                props.set_selected_version({version: newSelectedVersion, version_string: newSelectedVersionString});
+            }}
+        />
+    )
+}
+
+function DeployIconComponent(props: DeployVersionProps) {
 
     // Import the current Theme
     const { activeTheme } = useThemeContext();
@@ -173,7 +228,7 @@ function DeployIconComponent(props: DeployIconComponentProps) {
                             <button className={styles.close} onClick={() => setWouldDeploy(false)}>
                                 &times;
                             </button>
-                            <div className={styles.header}>Deploy <span className={styles.nameColor} data-theme={activeTheme}>{props.contract_name} ({props.version_string})</span> </div>
+                            <div className={styles.header}>Deploy <span className={styles.nameColor} data-theme={activeTheme}>{props.contract_name} ({props.selected_version.version_string})</span> </div>
                             <div className={styles.content}>
                                 <p className={styles.mainMessage}><b>You are about to create an instance of <span className={styles.nameColor} data-theme={activeTheme}>{props.contract_name}</span> published contract where you will be the owner.</b><br/></p>
                                 <div className={styles.deployedNameDiv}>
@@ -200,7 +255,7 @@ function DeployIconComponent(props: DeployIconComponentProps) {
 
                                                     const argsObj: DeployArgsObj = {
                                                         contract_name: props.contract_name,
-                                                        version: props.version,
+                                                        version: props.selected_version.version,
                                                         deployed_name: deployedName,
                                                         owner: props.userWalletInfo.address,
                                                         salt: undefined
@@ -234,6 +289,35 @@ function DeployIconComponent(props: DeployIconComponentProps) {
             )}
         </>
     );
+}
+
+function DeployVersionComponent(props: DeployProps) {
+
+    // The default selected version is the last one
+    const defaultSelectedVersion = {
+        version: props.versions[0].version,
+        version_string: props.versions[0].version_string
+    };
+
+    const [selectedVersion, setSelectedVersion] = useState<{version: Version, version_string: string}>(defaultSelectedVersion);
+
+    return (
+        <>
+            <td>
+                <VersionDropdownButton
+                    versions={props.versions}
+                    selected_version={selectedVersion}
+                    set_selected_version={setSelectedVersion}
+                />
+            </td>
+            <DeployIconComponent
+                userWalletInfo={props.userWalletInfo}
+                refetchDeployedContract={props.refetchDeployedContract}
+                contract_name={props.contract_name}
+                selected_version={selectedVersion}
+            />
+        </>
+    )
 }
 
 
@@ -310,17 +394,33 @@ export default function PublishedTab(props: StateVariablesProps) {
         const rows: JSX.Element[] = [];
 
         publishedContracts.forEach((publishedContract) => {
+
+            const versions: {version: Version, version_string: string}[] = [];
+
+            publishedContract.versions.forEach((obj) => {
+
+                // Version obj
+                const version = obj.version;
+
+                // Version string
+                const major = version.major;
+                const minor = version.minor;
+                const patch = version.patch;
+                const version_string = `v.${major}.${minor}.${patch}`;
+
+                versions.push({version, version_string});
+            })
+            versions.reverse();
+            
             rows.push(
                 <tr key={publishedContract.index} data-theme={activeTheme}>
                     <td className={styles.contractCell}>{publishedContract.name}</td>
                     <td>{publishedContract.author}</td>
-                    <td>{publishedContract.version_string}</td>
-                    <DeployIconComponent
+                    <DeployVersionComponent
                         userWalletInfo={props.walletInfo}
                         refetchDeployedContract={props.fetchDeployed as FetchDatas}
                         contract_name={publishedContract.name}
-                        version={publishedContract.version}
-                        version_string={publishedContract.version_string}
+                        versions={versions}
                     />
                 </tr>
             );
@@ -340,7 +440,7 @@ export default function PublishedTab(props: StateVariablesProps) {
                         <tr>
                             <th>Contract</th>
                             <th>Author</th>
-                            <th>Version</th>
+                            <th>Versions</th>
                             <th>Deploy</th>
                         </tr>
                     </thead>

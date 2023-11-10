@@ -99,7 +99,7 @@ main[data-theme="dark"] {
 p,
 p[data-theme="light"] {
   --smart-deploy-message-color: rgb(32, 30, 30);
-  --smart-deploy-message-filter-shadow: #00000070;
+  --smart-deploy-message-filter-shadow: #89878770;
   --grid-doc-font-color: black;
 }
 p[data-theme="dark"] {

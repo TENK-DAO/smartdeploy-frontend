@@ -1,5 +1,4 @@
 .publishedTabContainer {
-    min-height: 18rem;
     margin-bottom: 5rem;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -17,7 +16,7 @@
 
 .publishedTabContentContainer {
     max-height: 14.2rem; 
-    overflow-y: scroll;
+    overflow-y: scroll !important;
 }
 .publishedTabContentContainer::-webkit-scrollbar {
     display: none;
@@ -66,6 +65,7 @@
 .publishedTabContent tbody tr {
     color: var(--tr-font-color);
     border-bottom: 1px solid var(--tr-border-bottom-color);
+    position: relative;
 }
 
 .publishedTabContent tbody tr:nth-of-type(even) {
@@ -207,4 +207,46 @@
     background: #ffffff;
     border-radius: 18px;
     border: 1px solid #cfcece;
+}
+
+
+.dropdownControl {
+    display: flex;
+    width: 4.8rem;
+    justify-content: space-between;
+    padding: 0.3rem 0.2rem 0.3rem 0.2rem;
+    border-radius: 10px;
+}
+.dropdownControl:hover {
+    background-color: rgba(128, 128, 128, 0.216);
+    cursor: pointer;
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: 1.8rem;
+    border-radius: 3px;
+    z-index: 1;
+    padding: 0.2rem 0.3rem;
+    width: 4.8rem;
+    background-color: rgb(187, 186, 184);
+    font-size: 0.7rem;
+    border: solid 1px rgb(6, 6, 6);
+}
+
+.dropdownMenu > div {
+    list-style: disc inside;
+    font-weight: 600;
+    color: black;
+    cursor: pointer;
+    border-bottom: 1px solid gray;
+    padding-bottom: 0.2rem;
+    padding-top: 0.2rem;
+}
+.dropdownMenu > div:last-child {
+    border-bottom: none;
+}
+.dropdownMenu > div::before {
+    content: "\2022";
+    margin-right: 0.5rem;
 }

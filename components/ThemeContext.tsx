@@ -36,10 +36,6 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({ chil
     }
   }, []);
 
-  //useEffect(() => {
-  //  localStorage.setItem("theme", activeTheme as ThemeType);
-  //}, [activeTheme]);
-
   return (
       <ThemeContext.Provider value={{ activeTheme, setActiveTheme, inactiveTheme }}>
           {children}
