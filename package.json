@@ -3,16 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run bindings && next dev",
+    "build": "npm run bindings && next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "just && npm run bindings",
+    "postinstall": "just",
     "soroban": "./target/bin/soroban",
-    "bindings": "npm run soroban -- contract bindings typescript --overwrite --network testnet --contract-id $(cat contract_id.txt) --output-dir node_modules/smartdeploy-client"
+    "bindings": "npm run soroban -- contract bindings typescript --overwrite --network testnet --contract-id $(cat contract_id.txt) --output-dir packages/smartdeploy-client"
   },
   "dependencies": {
     "@stellar/freighter-api": "^1.7.1",
+    "@tanstack/react-query": "^5.20.5",
+    "axios": "^1.6.7",
+    "date-fns": "^3.3.1",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
@@ -26,5 +29,8 @@
     "@types/react-dom": "^18",
     "@types/uikit": "^3.14.1",
     "typescript": "^5"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

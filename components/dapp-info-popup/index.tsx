@@ -1,7 +1,7 @@
 import Popup from 'reactjs-popup';
 import styles from './style.module.css';
 import { useState, useEffect, ChangeEvent } from 'react';
-import { useThemeContext } from '../ThemeContext'
+import { useThemeContext } from '../../context/ThemeContext'
 
 export default function PopupDappInfo() {
 

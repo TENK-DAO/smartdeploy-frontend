@@ -62,6 +62,14 @@ div[data-theme="light"] {
 
   --popup-background-color: rgb(219, 224, 224);
   --popup-font-color: rgb(33, 31, 31);
+
+  --toggle-table-button-selected-bg: rgba(181, 97, 58, 0.565);
+  --toggle-table-button-selected-color: #272626;
+  --toggle-table-button-not-selected-bg: rgba(181, 97, 58, 0.35);
+  --toggle-table-button-not-selected-color: #27262671;
+
+  --ttl-popup-bg-color: rgb(43, 41, 41);
+  --ttl-popup-text-color: #c7c2c2;  
 }
 div[data-theme="dark"] {
   --headerBar-background-color: #04042dab;
@@ -84,6 +92,14 @@ div[data-theme="dark"] {
 
   --popup-background-color: rgb(45, 49, 49);
   --popup-font-color: whitesmoke;
+
+  --toggle-table-button-selected-bg: #0d589f59;
+  --toggle-table-button-selected-color: #b6b3b3;
+  --toggle-table-button-not-selected-bg: #0d599f30;
+  --toggle-table-button-not-selected-color: #b6b3b390;
+
+  --ttl-popup-bg-color: rgb(189, 186, 186);
+  --ttl-popup-text-color: #111111;
 }
 
 main,
@@ -171,11 +187,15 @@ button[data-theme="light"] {
   --popup-button-font-color: rgb(18, 16, 16);
   --popup-button-background-color: rgba(236, 136, 22, 0.745);
   --popup-button-hover: rgba(198, 117, 24, 0.745);
+  --popup-button-disabled-font-color: rgba(53, 53, 54, 0.563);
+  --popup-button-disabled-background-color: rgba(157, 160, 160, 0.684);
 }
 button[data-theme="dark"] {
   --popup-button-font-color: rgb(0, 212, 250);
   --popup-button-background-color: rgb(45, 49, 49);
   --popup-button-hover: rgba(2, 111, 128, 0.316);
+  --popup-button-disabled-font-color: rgba(0, 212, 250, 0.332);
+  --popup-button-disabled-background-color: rgba(45, 49, 49, 0.188);
 }
 
 input,

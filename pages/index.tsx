@@ -1,89 +1,60 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 import { useState, Dispatch, SetStateAction } from 'react'
 import styles from '@/styles/Home.module.css'
 import WalletInfo from '@/components/wallet'
 import PublishedTab from '@/components/published-tab'
 import DeployedTab from '@/components/deployed-tab'
 import PopupDappInfo from '@/components/dapp-info-popup'
-import { FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
+import { 
+  getDeployEvents, DeployEventData,
+  getPublishEvents, PublishEventData,
+  getClaimEvents, ClaimEventData,
+} from '@/mercury_indexer/smartdeploy-api-client'
+import { FaDiscord, FaTwitter, FaGithub } from "react-icons/fa"
 import { BsFillSunFill } from 'react-icons/bs'
 import { MdNightlightRound } from 'react-icons/md'
-import { Contract, networks } from 'smartdeploy-client';
-import { useThemeContext } from '../components/ThemeContext'
+import { Contract, networks } from 'smartdeploy-client'
+import { useThemeContext } from '../context/ThemeContext'
 
-const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto({ weight: ['400', '700'], subsets: ['latin'] })
 
 // Smartdeploy Contract Instance
 export const smartdeploy = new Contract({
-  networkPassphrase: "Test SDF Network ; September 2015",
-  contractId: "CDNOMEB3ZQHS5WPCUPQ7IS4OKGTOTBRDCZUITBRNSQAB63JJ52JFO4KX",
+  ...networks.testnet,
   rpcUrl: 'https://soroban-testnet.stellar.org:443',
 });
-
-export type UserWalletInfo = {
-  connected: boolean;
-  setConnected: Dispatch<SetStateAction<boolean>>;
-  hasFreighter: boolean;
-  setHasFreighter: Dispatch<SetStateAction<boolean>>;
-  address: string;
-  setAddress: Dispatch<SetStateAction<string>>;
-  network: string;
-  setNetwork: Dispatch<SetStateAction<string>>;
-}
-
-export type FetchDatas = {
-  fetch: boolean;
-  setFetch: Dispatch<SetStateAction<boolean>>;
-}
-
-export type StateVariablesProps = {
-  walletInfo: UserWalletInfo;
-  fetchDeployed?: FetchDatas;
-  fetchPublished?: FetchDatas;
-}
 
 export default function Home() {
 
   // Import the current Theme
   const { activeTheme, setActiveTheme, inactiveTheme } = useThemeContext();
 
-  // State variables from Freighter Wallet
-  const [connected, setConnected] = useState<boolean>(false);
-  const [hasFreighter, setHasFreighter] = useState<boolean>(true);
-  const [address, setAddress] = useState<string>("");
-  const [network, setNetwork] = useState<string>("");
+  const [deployEvents, setDeployEvents] = useState<DeployEventData[] | undefined>([]);
+  const [publishEvents, setPublishEvents] = useState<PublishEventData[] | undefined>([]);
+  const [claimEvents, setClaimEvents] = useState<ClaimEventData[] | undefined>([]);
 
-  // Parse state variables regarding the Freighter's infos
-  const userWalletInfo: UserWalletInfo = {
-    connected,
-    setConnected,
-    hasFreighter,
-    setHasFreighter,
-    address,
-    setAddress,
-    network,
-    setNetwork,
+  let newPublishEvents = getPublishEvents();
+  // Update publishEvents if necessary
+  if (newPublishEvents != publishEvents) {
+      setPublishEvents(newPublishEvents);
   }
+  console.log("PUBLISH EVENTS: ", publishEvents)
 
-  // State variable to fetch the published contracts
-  const [fetchPublishedContracts, setFetchPublishedContracts] = useState<boolean>(true);
-
-  // Parse state variable for fetching the deployed contracts
-  const parsedFetchPublishedContracts: FetchDatas = {
-    fetch: fetchPublishedContracts,
-    setFetch: setFetchPublishedContracts,
+  let newDeployEvents = getDeployEvents();
+  // Update deployEvents if necessary
+  if (newDeployEvents != deployEvents) {
+      setDeployEvents(newDeployEvents);
   }
+  console.log("DEPLOY EVENTS: ", deployEvents)
 
-  // State variable to fetch the deployed contracts
-  const [fetchDeployedContracts, setFetchDeployedContracts] = useState<boolean>(true);
-
-  // Parse state variable for fetching the deployed contracts
-  const parsedFetchDeployedContracts: FetchDatas = {
-    fetch: fetchDeployedContracts,
-    setFetch: setFetchDeployedContracts,
+  let newClaimEvents = getClaimEvents();
+  // Update deployEvents if necessary
+  if (newClaimEvents != claimEvents) {
+      setClaimEvents(newClaimEvents);
   }
+  console.log("CLAIM EVENTS: ", claimEvents)
 
   return (
     <>
@@ -94,7 +65,7 @@ export default function Home() {
         <link rel="icon" href="/sd-logo-det.ico" />
       </Head>
 
-      <div className={styles.headerBar} data-theme={activeTheme}>
+      <div className={`${styles.headerBar} ${roboto.className}`} data-theme={activeTheme}>
         <div className={styles.container} data-theme={activeTheme}>
           <div className={styles.social} data-theme={activeTheme}>
             {activeTheme === 'dark' ? (
@@ -148,7 +119,7 @@ export default function Home() {
               <FaTwitter className={styles.socialItem} style={{ fill: 'var(--social-item)' }}/>
             </a>
           </div>
-          <WalletInfo walletInfo={userWalletInfo}/>
+          <WalletInfo/>
           { activeTheme === "dark" ? (
               <BsFillSunFill  className={styles.themeChange}
                               style={{ fill: 'var(--social-item)' }}
@@ -167,7 +138,7 @@ export default function Home() {
         </div>
       </div>
 
-      <main className={`${styles.main} ${inter.className}`} data-theme={activeTheme}>
+      <main className={`${styles.main} ${roboto.className}`} data-theme={activeTheme}>
 
         <div className={styles.center} data-theme={activeTheme}>
           { activeTheme === "dark" ? (
@@ -193,8 +164,8 @@ export default function Home() {
         </div>
 
         <PopupDappInfo/>
-        <PublishedTab walletInfo={userWalletInfo} fetchDeployed={parsedFetchDeployedContracts} fetchPublished={parsedFetchPublishedContracts}/>
-        <DeployedTab fetch={fetchDeployedContracts} setFetch={setFetchDeployedContracts}/>
+        <PublishedTab publishEvents={publishEvents} deployEvents={deployEvents}/>
+        <DeployedTab deployEvents={deployEvents} claimEvents={claimEvents}/>
         
         <div className={styles.grid}>
           <a

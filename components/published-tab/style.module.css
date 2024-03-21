@@ -1,9 +1,52 @@
 .publishedTabContainer {
     margin-bottom: 5rem;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-right-radius: 8px;
     box-shadow:
         1.2rem 1.2rem 35px 22px var(--table-box-shadow);
+}
+
+.toggleTabContainer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: left;
+    width: 14rem;
+}
+.toggleTabContainer:hover {
+    cursor: pointer;
+}
+
+.allContractsButtonSelected {
+    color: var(--toggle-table-button-selected-color);
+    background-color: var(--toggle-table-button-selected-bg);
+    font-size: 0.9rem;
+    padding: 0.6rem;
+    border-radius: 8px 0 0 0;
+    height: 2.4rem;
+}
+
+.allContractsButtonNotSelected {
+    color: var(--toggle-table-button-not-selected-color);
+    background-color: var(--toggle-table-button-not-selected-bg);
+    font-size: 0.9rem;
+    padding: 0.6rem;
+    border-radius: 8px 0 0 0;
+}
+
+.myContractsButtonSelected {
+    color: var(--toggle-table-button-selected-color);
+    background-color: var(--toggle-table-button-selected-bg);
+    font-size: 0.9rem;
+    padding: 0.6rem;
+    border-radius: 0 8px 0 0;
+    height: 2.4rem;
+}
+
+.myContractsButtonNotSelected {
+    color: var(--toggle-table-button-not-selected-color);
+    background-color: var(--toggle-table-button-not-selected-bg);
+    font-size: 0.9rem;
+    padding: 0.6rem;
+    border-radius: 0 8px 0 0;
 }
 
 .publishedTabHead,
@@ -11,7 +54,7 @@
     table-layout: fixed;
     border-collapse: collapse;
     margin-top: 0rem;
-    width: 55rem;
+    width: 65rem;
 }
 
 .publishedTabContentContainer {
@@ -29,20 +72,40 @@
     color: var(--caption-font-color);
     text-align: center;
     padding: 0.9rem 0.4rem 0.6rem 0.4rem;
-    border-radius: 8px 8px 0 0;
+    border-radius: 0 8px 0 0;
 }
 
 .contractCol {
-    width: 18%;
+    width: 14%;
+}
+.instancesCol {
+    width: 9%;
 }
 .authorCol {
-    width: 64%;
+    width: 57%;
 }
 .versionCol {
-    width: 10%;
+    width: 12%;
 }
 .deployCol {
     width: 8%;
+}
+
+.instancesThead {
+    text-align: center;
+}
+.instancesTd {
+    text-align: center;
+}
+
+.tabMessage {
+    color: var(--toggle-table-button-selected-color);
+    padding: 0.5rem;
+    width: 65rem;
+    text-align: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .publishedTabHead thead {
@@ -73,7 +136,7 @@
 }
 
 .contractCell {
-    text-overflow: ellipsis;
+    text-overflow: scroll;
 }
 .contractCell::-webkit-scrollbar {
     display: none;
@@ -106,6 +169,14 @@
 }
 
 .popupContainer {
+    background-color: var(--popup-background-color);
+    color: var(--popup-font-color);
+    font-family: Arial, Helvetica, sans-serif;
+    width: 40rem;
+    border-radius: 10px;
+    border: solid 1px rgb(76, 75, 75);
+}
+.bumpingPopupContainer {
     background-color: var(--popup-background-color);
     color: var(--popup-font-color);
     font-family: Arial, Helvetica, sans-serif;
@@ -155,14 +226,45 @@
 }
 .deployedNameInput::placeholder {
     color: rgba(128, 128, 128, 0.51);
-  }
+}
+
+.bumpContainer {
+    text-align: justify;
+    padding-left: 2.2rem;
+    padding-right: 2.2rem;
+}
+
+.bumpContainer > p {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--popup-input-font-color);
+}
+
+.checkboxContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.6rem;
+    margin-left: 0.9rem;
+}
+.checkboxContainer > div {
+    display: flex;
+    margin-top: 0.4rem;
+}
+.checkboxContainer > div > input[type="checkbox"] {
+    transform: scale(1.5); 
+    margin-right: 0.5rem;
+    accent-color: rgb(18, 194, 18);
+}
+.checkboxContainer > div > label {
+    font-size: 1rem;
+    color: var(--popup-input-font-color);
+}
 
 .buttonContainer {
     width: 100%;
     padding-top: 0.5rem;
     padding-bottom:  1rem;
     text-align: center;
-    
 }
 
 .button {
@@ -179,6 +281,18 @@
 }
 .button:hover {
     background-color: var(--popup-button-hover);
+}
+.buttonDisabled {
+    margin-right: 2rem;
+    margin-left: 2rem;
+    padding: 0.2rem 2.5rem 0.2rem 2.5rem;
+    width: 15rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: var(--popup-button-disabled-background-color);
+    color: var(--popup-button-disabled-font-color);
+    border: 1.5px solid var(--popup-button-disabled-font-color);
+    border-radius: 5px;
 }
 .buttonWhenDeploying {
     margin-right: 2rem;
